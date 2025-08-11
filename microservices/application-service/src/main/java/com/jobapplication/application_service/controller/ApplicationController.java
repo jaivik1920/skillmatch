@@ -18,6 +18,7 @@ public class ApplicationController {
     @PostMapping("/apply")
     public ResponseEntity<?> applyForJob(@RequestBody Application application) {
         try {
+
             applicationService.createApplication(application);
             return ResponseEntity.ok("Application submitted successfully");
         } catch (Exception e) {

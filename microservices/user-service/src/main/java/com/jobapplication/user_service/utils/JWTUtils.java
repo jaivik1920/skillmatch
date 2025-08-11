@@ -16,9 +16,10 @@ import java.util.Date;
 
 public class JWTUtils {
 
-    public static String generateJWTToken(String username, String SECRET_KEY) {
+    public static String generateJWTToken(int userId,String username, String SECRET_KEY) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(String.valueOf(userId))
+                .claim("username", username)
                 .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)
                 .setExpiration(Date.from(Instant.now().plus(1,ChronoUnit.HOURS)))
                 .setIssuer("user-service")

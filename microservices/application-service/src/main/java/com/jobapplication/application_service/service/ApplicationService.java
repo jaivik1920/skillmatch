@@ -1,5 +1,6 @@
 package com.jobapplication.application_service.service;
 
+import com.jobapplication.application_service.config.UserContext;
 import com.jobapplication.application_service.model.Application;
 import com.jobapplication.application_service.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ApplicationService {
@@ -15,9 +17,13 @@ public class ApplicationService {
     private ApplicationRepository applicationRepository;
 
     public void createApplication(Application application) {
+        application.setApplicantId(Integer.parseInt(Objects.requireNonNull(UserContext.getUserId())));
         application.setAppliedAt(LocalDateTime.now());
         if (applicationRepository.existsById(application.getId())) {
             throw new RuntimeException("Application already exists with ID: " + application.getId());
+        }
+        else if(applicationRepository.findByJobIdAndApplicantId(application.getJobId(), application.getApplicantId()).isPresent()){
+            throw  new RuntimeException(("Already applied to this job"));
         }
         applicationRepository.save(application);
     }
