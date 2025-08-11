@@ -6,7 +6,6 @@ import com.jobapplication.user_service.model.User;
 import com.jobapplication.user_service.repository.UserRepository;
 import com.jobapplication.user_service.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,7 +39,7 @@ public class AuthService {
                .filter(u -> passwordEncoder.matches(user.getPassword(), u.getPassword()))
                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
 
-      String token = JWTUtils.generateJWTToken(exisitingUser.getUsername(), SECRET_KEY);
+      String token = JWTUtils.generateJWTToken(exisitingUser.getId(),exisitingUser.getUsername(), SECRET_KEY);
       return ResponseDTO.builder()
               .token(token)
               .user(UserDTO.builder()
