@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class AlertService {
 
     private final AlertRepository alertRepository;
+    private final SSEService sseService;
 
     public Alert createAlert(Alert alert)
     {
@@ -77,6 +78,8 @@ public class AlertService {
                     .collect(Collectors.toList());
         }
 
-       System.out.println(userIds);
+       userIds.forEach(id ->{
+            sseService.sendNotifications(id,event);
+        });
    }
 }

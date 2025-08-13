@@ -45,6 +45,7 @@ public class AuthService {
               .user(UserDTO.builder()
                       .username(exisitingUser.getUsername())
                       .role(exisitingUser.getRole().toString())
+                      .userId(exisitingUser.getId())
                       .build())
               .build();
     }

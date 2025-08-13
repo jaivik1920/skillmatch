@@ -23,7 +23,7 @@ public class JWTAuthenticationFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String uriPath = exchange.getRequest().getURI().getPath();
 
-        if(uriPath.startsWith("/user-service/auth"))
+        if(uriPath.startsWith("/user-service/auth") || uriPath.startsWith("/notification-service/subscribe"))
             return chain.filter(exchange);
 
         String token = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
