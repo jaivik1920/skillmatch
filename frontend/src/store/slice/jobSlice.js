@@ -21,7 +21,9 @@ const jobslice = createSlice({
         status: 'idle'
     },
     reducers:{
-
+            setStatus : (state,action) =>{
+                state.status = action.payload;
+            }
     },
     extraReducers: (builder) =>{
         builder
@@ -41,4 +43,5 @@ const jobslice = createSlice({
 });
 
 export {fetchJobsAPI};
+export const {setStatus} = jobslice.actions;
 export default jobslice.reducer;
