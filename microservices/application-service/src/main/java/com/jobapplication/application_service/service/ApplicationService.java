@@ -1,6 +1,7 @@
 package com.jobapplication.application_service.service;
 
 import com.jobapplication.application_service.config.UserContext;
+import com.jobapplication.application_service.dto.ApplicationResponseDTO;
 import com.jobapplication.application_service.model.Application;
 import com.jobapplication.application_service.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,9 @@ public class ApplicationService {
 
     public List<Application> getAllApplicationsByApplicantId(int applicantId) {
         return applicationRepository.findByApplicantId(applicantId);
+    }
+
+    public List<ApplicationResponseDTO> getAllApplicationsByApplicantIdWithJobdetails(int applicantId) {
+        return applicationRepository.findByApplicantIdWithJobDetails(applicantId);
     }
 }
