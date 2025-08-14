@@ -1,5 +1,6 @@
 package com.jobapplication.application_service.controller;
 
+import com.jobapplication.application_service.dto.ApplicationResponseDTO;
 import com.jobapplication.application_service.model.Application;
 import com.jobapplication.application_service.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,20 @@ public class ApplicationController {
     public ResponseEntity<?> getApplicationsByApplicantId(@PathVariable int applicantId) {
         try {
             List<Application> applications = applicationService.getAllApplicationsByApplicantId(applicantId);
+
+            if (applications.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No applications for applicant ID: " + applicantId);
+
+            return ResponseEntity.ok(applications);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/getApplicationsByApplicantIdWithJobDetails/{applicantId}")
+    public ResponseEntity<?> getApplicationsByApplicantIdWithJobDetails(@PathVariable int applicantId) {
+        try {
+            List<ApplicationResponseDTO> applications = applicationService.getAllApplicationsByApplicantIdWithJobdetails(applicantId);
 
             if (applications.isEmpty())
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No applications for applicant ID: " + applicantId);

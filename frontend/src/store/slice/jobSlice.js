@@ -3,7 +3,7 @@ import api from "../../api/axiosInterceptor";
 
 
 const fetchJobsAPI = createAsyncThunk("jobs/fetchJobsAPI",
-    async (thunkAPI) =>{
+    async (_,thunkAPI) =>{
         try {
             const response = await api.get("/job-service/getAllJobs");
             return response.data;

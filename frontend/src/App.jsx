@@ -7,6 +7,7 @@ import JobList from "./pages/JobList"
 import NotificationListner from "./components/NotificationListner"
 import { ToastContainer } from "react-toastify"
 import PostJob from "./pages/PostJob"
+import MyApplicationsList from "./pages/MyApplicationsList"
 
 const App = () => {
 
@@ -22,7 +23,7 @@ const App = () => {
         <Route path="/post-job" element={<ProtectedRoute><PostJob/></ProtectedRoute>} />
         <Route path="/my-jobs" element={<ProtectedRoute><JobList/></ProtectedRoute>} />
         <Route path="/jobs" element={<ProtectedRoute><JobList/></ProtectedRoute>} /> 
-        <Route path="/my-applications" element={<ProtectedRoute><h1>My Applications</h1></ProtectedRoute>} />
+        <Route path="/my-applications" element={<ProtectedRoute><MyApplicationsList/></ProtectedRoute>} />
         <Route path="/my-profile" element={<ProtectedRoute><h1>My Profile</h1></ProtectedRoute>} />
       </Routes>
     </>
