@@ -8,6 +8,7 @@ import NotificationListner from "./components/NotificationListner"
 import { ToastContainer } from "react-toastify"
 import PostJob from "./pages/PostJob"
 import MyApplicationsList from "./pages/MyApplicationsList"
+import Home from "./pages/Home"
 
 const App = () => {
 
@@ -17,7 +18,7 @@ const App = () => {
       <ToastContainer position="top-right" autoClose = {5000}/>
       <Navbar/>
       <Routes>
-      <Route path= "/" element={ <h1>Hello SkillMatch </h1>} />
+      <Route path= "/" element={<Home/>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/post-job" element={<ProtectedRoute><PostJob/></ProtectedRoute>} />
