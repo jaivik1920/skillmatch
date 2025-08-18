@@ -2,8 +2,10 @@ package com.jobapplication.application_service.service;
 
 import com.jobapplication.application_service.config.UserContext;
 import com.jobapplication.application_service.dto.ApplicationResponseDTO;
+import com.jobapplication.application_service.dto.ApplyJobEventDTO;
 import com.jobapplication.application_service.model.Application;
 import com.jobapplication.application_service.repository.ApplicationRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class ApplicationService {
 
-    @Autowired
-    private ApplicationRepository applicationRepository;
+    private final ApplicationRepository applicationRepository;
+    private final ApplyJobEventProducer applyJobEventProducer;
 
     public void createApplication(Application application) {
         application.setApplicantId(Integer.parseInt(Objects.requireNonNull(UserContext.getUserId())));
@@ -26,7 +29,11 @@ public class ApplicationService {
         else if(applicationRepository.findByJobIdAndApplicantId(application.getJobId(), application.getApplicantId()).isPresent()){
             throw  new RuntimeException(("Already applied to this job"));
         }
-        applicationRepository.save(application);
+        Application saveApplication = applicationRepository.save(application);
+        applyJobEventProducer.sendApplyJobEvent(ApplyJobEventDTO.builder()
+                                                            .applicationId(saveApplication.getId())
+                                                            .applicationId(Integer.parseInt(UserContext.getUserId()))
+                                                            .jobId(saveApplication.getJobId()).build());
     }
 
     public void updateApplication(Application application) {
