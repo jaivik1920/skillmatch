@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { connectToSSE } from "../service/SSEService";
+import { connectToSSE } from "../service/sseService";
 import { toast } from "react-toastify";
 
 const NotificationListner = ()=>{
@@ -19,7 +19,12 @@ const NotificationListner = ()=>{
     },[user?.userId,dispatch]);
 
     useEffect(()=>{
-        if(notifications.length > 0)
+        if(notifications.length > 0 && user?.role === "RECRUITER")
+        {
+            const latestNotification = notifications[notifications.length - 1];
+            toast.info(`Someone applied to jobid ${latestNotification.jobId}`);
+        }
+        else if(notifications.length > 0 && user?.role === "APPLICANT")
         {
             const latestNotification = notifications[notifications.length - 1];
             console.log(`new job posted ${latestNotification.jobTitle}`);

@@ -9,6 +9,12 @@ const connectToSSE = (userId,dispatch)=>{
         eventSource.addEventListener("job-posted", event =>{
             const notification = JSON.parse(event.data);
             dispatch(addNotification(notification));
+        });
+
+        eventSource.addEventListener("job-applied", event =>{
+            console.log("data receieved");
+            const notification = JSON.parse(event.data);
+            dispatch(addNotification(notification));
         })
 
         eventSource.onerror = error =>{

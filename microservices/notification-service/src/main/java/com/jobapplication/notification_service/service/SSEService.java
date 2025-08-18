@@ -1,5 +1,6 @@
 package com.jobapplication.notification_service.service;
 
+import com.jobapplication.notification_service.dto.ApplyJobEventDTO;
 import com.jobapplication.notification_service.dto.JobEventDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -46,6 +47,20 @@ public class SSEService {
            } catch (Exception e) {
                throw new RuntimeException(e);
            }
+        });
+    }
+
+    public void sendApplyJobEventNotifications(int userid, ApplyJobEventDTO eventDTO)
+    {
+        List<SseEmitter> emitters = sseMap.getOrDefault(userid, new ArrayList<>());
+        emitters.forEach(emitter ->{
+            try {
+                emitter.send(SseEmitter.event().name("job-applied").data(eventDTO));
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
         });
     }
 }
