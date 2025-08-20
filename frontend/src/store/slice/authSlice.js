@@ -84,5 +84,4 @@ const authSlice = createSlice({
 
 export const {logout,setMessage,clearMessage} = authSlice.actions;
 export {loginAPI, registerAPI};
-export const authState = (state) => state.auth;
 export default authSlice.reducer;

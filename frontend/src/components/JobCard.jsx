@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { applyJobAPI } from "../store/slice/jobApplicationSlice";
+import { applyJobAPI, setApplicationListStatus } from "../store/slice/jobApplicationSlice";
 import { useState } from "react";
 
 const JobCard =({job}) =>{
@@ -16,6 +16,7 @@ const JobCard =({job}) =>{
         try {
             await dispatch(applyJobAPI(job.id)).unwrap();
             setStatus("succeeded");
+            dispatch(setApplicationListStatus("idle"));
         } catch (error) {
             setStatus("failed");
             setError(error || "Error while submitting application");

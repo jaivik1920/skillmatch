@@ -1,3 +1,4 @@
+import { setStatus } from "../store/slice/jobSlice";
 import { addNotification } from "../store/slice/notificationSlice";
 
 const connectToSSE = (userId,dispatch)=>{
@@ -6,9 +7,14 @@ const connectToSSE = (userId,dispatch)=>{
 
         const eventSource = new EventSource(sseURL);
 
+        eventSource.addEventListener("new-job-posted", event =>{
+            dispatch(setStatus("idle"));
+        })
+
         eventSource.addEventListener("job-posted", event =>{
             const notification = JSON.parse(event.data);
             dispatch(addNotification(notification));
+            dispatch(setStatus("idle"));
         });
 
         eventSource.addEventListener("job-applied", event =>{

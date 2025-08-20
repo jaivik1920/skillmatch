@@ -12,17 +12,17 @@ const MyApplicationsList = ()=>{
     };  
 
     const dispatch = useDispatch();
-    const {applications, status,error} = useSelector(state => state.jobApplication);
+    const {applications, applicationListStatus,applicationListError} = useSelector(state => state.jobApplication);
     const {user} = useSelector(state => state.auth);
     useEffect(()=>{
-        if(status === "idle")
+        if(applicationListStatus === "idle")
             dispatch(getApplicationsByApplicantIdAPI(user?.userId));
-    },[status,dispatch]);
+    },[applicationListStatus,dispatch]);
 
     return <>
         <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {status === "loading" && <p>Loading jobs...</p>}
-        {error && <p className="text-red-500">{error}</p>}
+        {applicationListStatus === "loading" && <p>Loading jobs...</p>}
+        {applicationListError && <p className="text-red-500">{applicationListError}</p>}
         {applications.map((application) => (
             <div
             key={application.applicationId}

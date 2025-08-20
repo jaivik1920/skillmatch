@@ -5,6 +5,7 @@ import com.jobapplication.notification_service.dto.JobEventDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,21 @@ public class SSEService {
         return emitter;
     }
 
+    public void publishJobPostedEvent()
+    {
+        for(Map.Entry<Integer, List<SseEmitter>> entry : sseMap.entrySet())
+        {
+            entry.getValue().forEach(emitter -> {
+                try {
+                    emitter.send(SseEmitter.event().name("new-job-posted"));
+                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+                    System.err.println(e.getMessage());
+                }
+            });
+        }
+    }
+
     public void sendNotifications(int userid, JobEventDTO dto)
     {
         List<SseEmitter> emitters = sseMap.getOrDefault(userid, new ArrayList<>());
@@ -45,7 +61,7 @@ public class SSEService {
            try{
                 emitter.send(SseEmitter.event().name("job-posted").data(dto));
            } catch (Exception e) {
-               throw new RuntimeException(e);
+               System.err.println(e.getMessage());
            }
         });
     }
@@ -59,7 +75,7 @@ public class SSEService {
             }
             catch (Exception e)
             {
-                throw new RuntimeException(e);
+                System.err.println(e.getMessage());
             }
         });
     }
