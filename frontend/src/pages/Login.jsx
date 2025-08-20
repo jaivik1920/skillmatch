@@ -1,13 +1,13 @@
 import { useState } from "react"
 import InputField from "../components/InputField"
 import { useDispatch, useSelector } from "react-redux"
-import { authState, loginAPI } from "../store/slice/authSlice";
+import {loginAPI } from "../store/slice/authSlice";
 import { useNavigate } from "react-router-dom";
 
 const Login = () =>{
 
     const dispatch = useDispatch();
-    const {loading, error, message} = useSelector(authState);
+    const {loading, error, message} = useSelector(state => state.auth);
     const navigate = useNavigate();
 
     const [formdata, setFormData] = useState({

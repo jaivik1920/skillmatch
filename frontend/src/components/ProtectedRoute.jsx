@@ -1,9 +1,8 @@
 import { useSelector } from "react-redux"
-import { authState } from "../store/slice/authSlice"
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({children}) =>{
-    const {isAuthenticated} = useSelector(authState);
+    const {isAuthenticated} = useSelector(state => state.auth);
 
     if(isAuthenticated)
         return children;

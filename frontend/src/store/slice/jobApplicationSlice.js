@@ -27,42 +27,47 @@ const getApplicationsByApplicantIdAPI = createAsyncThunk('application/getApplica
 const jobApplicationSlice = createSlice({
     name: 'jobApplication',
     initialState:{
-        status : "idle",
+        applyStatus : "idle",
         applications: [],
-        error: null
+        applyError: null,
+        applicationListStatus : "idle",
+        applicationListError : null
     },
     reducers:{
-
+            setApplicationListStatus : (state,action) =>{
+                state.applicationListStatus = action.payload;
+            }
     },
     extraReducers: (builder)=>{
         builder.
             addCase(applyJobAPI.pending, state =>{
-                state.status = "loading";
-                state.error = null;
+                state.applyStatus = "loading";
+                state.applyError = null;
             })
             .addCase(applyJobAPI.fulfilled, state =>{
-                state.status = "succeeded";
-                state.error = null;
+                state.applyStatus = "succeeded";
+                state.applyError = null;
             })
             .addCase(applyJobAPI.rejected, (state,action) =>{
-                state.status = "failed",
-                state.error = action.payload
+                state.applyStatus = "failed",
+                state.applyError = action.payload
             })
             .addCase(getApplicationsByApplicantIdAPI.pending, state =>{
-                state.status = "loading";
-                state.error = null;
+                state.applicationListStatus = "loading";
+                state.applicationListError = null;
             })
             .addCase(getApplicationsByApplicantIdAPI.fulfilled, (state,action) =>{
-                state.status = "succeeded";
+                state.applicationListStatus = "succeeded";
                 state.applications = action.payload;
-                state.error = null;
+                state.applicationListError = null;
             })
             .addCase(getApplicationsByApplicantIdAPI.rejected, (state,action) =>{
-                state.status = "failed";
-                state.error = action.payload || "failed to fetch applications";
+                state.applicationListStatus = "failed";
+                state.applicationListError = action.payload || "failed to fetch applications";
             })
     }
 })
 
+export const {setApplicationListStatus} = jobApplicationSlice.actions;
 export {applyJobAPI, getApplicationsByApplicantIdAPI};
 export default jobApplicationSlice.reducer;

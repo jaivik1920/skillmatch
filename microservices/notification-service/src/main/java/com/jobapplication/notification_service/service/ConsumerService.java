@@ -18,6 +18,7 @@ public class ConsumerService {
             try
             {
                 System.out.println("Received job event: " + event);
+                sseService.publishJobPostedEvent();
                 alertService.processAlerts(event);
             } catch (Exception e) {
                 System.out.println("Error processing job event: " + e.getMessage());
