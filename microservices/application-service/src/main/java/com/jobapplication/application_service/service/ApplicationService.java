@@ -30,10 +30,13 @@ public class ApplicationService {
             throw  new RuntimeException(("Already applied to this job"));
         }
         Application saveApplication = applicationRepository.save(application);
+
+        String jobTitle = applicationRepository.findJobDetailsById(saveApplication.getJobId()).orElse("JobTitle");
         applyJobEventProducer.sendApplyJobEvent(ApplyJobEventDTO.builder()
                                                             .applicationId(saveApplication.getId())
-                                                            .applicationId(Integer.parseInt(UserContext.getUserId()))
-                                                            .jobId(saveApplication.getJobId()).build());
+                                                            .applicantId(Integer.parseInt(UserContext.getUserId()))
+                                                            .jobId(saveApplication.getJobId())
+                                                            .jobTitle(jobTitle).build());
     }
 
     public void updateApplication(Application application) {

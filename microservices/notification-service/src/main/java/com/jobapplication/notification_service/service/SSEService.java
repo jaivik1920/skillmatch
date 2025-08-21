@@ -44,7 +44,8 @@ public class SSEService {
         {
             entry.getValue().forEach(emitter -> {
                 try {
-                    emitter.send(SseEmitter.event().name("new-job-posted"));
+                    emitter.send(SseEmitter.event().name("new-job-posted").data("new job posted"));
+                    System.out.println("New Job Posted Event send");
                 } catch (IOException e) {
 //                    throw new RuntimeException(e);
                     System.err.println(e.getMessage());
