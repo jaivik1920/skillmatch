@@ -14,4 +14,5 @@ public class ApplyJobEventDTO {
     private int applicationId;
     private int jobId;
     private int applicantId;
+    private String jobTitle;
 }

@@ -19,17 +19,18 @@ const NotificationListner = ()=>{
     },[user?.userId,dispatch]);
 
     useEffect(()=>{
-        if(notifications.length > 0 && user?.role === "RECRUITER")
-        {
-            const latestNotification = notifications[notifications.length - 1];
-            toast.info(`Someone applied to jobid ${latestNotification.jobId}`);
-        }
-        else if(notifications.length > 0 && user?.role === "APPLICANT")
-        {
-            const latestNotification = notifications[notifications.length - 1];
-            console.log(`new job posted ${latestNotification.jobTitle}`);
-            toast.info(`New Job posted. Job Title : ${latestNotification.jobTitle} at ${latestNotification.company}`);
-        }
+        if(notifications.length == 0) return;
+        const latestNotification = notifications[notifications.length - 1];
+        const notificationMessages = {
+            JOB_APPLIED: () =>
+            `Applicant applied to jobid: job${latestNotification.jobId} Job Title: ${latestNotification.jobTitle}`,
+            JOB_POSTED: () =>
+            `New Job posted. Job Title: ${latestNotification.jobTitle} at ${latestNotification.company}`,
+        };
+
+        const message = notificationMessages[latestNotification.type];
+        toast.info(message);
+
     },[notifications]);
 
     return;

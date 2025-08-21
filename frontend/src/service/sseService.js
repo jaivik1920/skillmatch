@@ -8,11 +8,13 @@ const connectToSSE = (userId,dispatch)=>{
         const eventSource = new EventSource(sseURL);
 
         eventSource.addEventListener("new-job-posted", event =>{
+            console.log(event.data);
             dispatch(setStatus("idle"));
         })
 
         eventSource.addEventListener("job-posted", event =>{
             const notification = JSON.parse(event.data);
+            notification.type = "JOB_POSTED";
             dispatch(addNotification(notification));
             dispatch(setStatus("idle"));
         });
@@ -20,6 +22,7 @@ const connectToSSE = (userId,dispatch)=>{
         eventSource.addEventListener("job-applied", event =>{
             console.log("data receieved");
             const notification = JSON.parse(event.data);
+            notification.type = "JOB_APPLIED";
             dispatch(addNotification(notification));
         })
 

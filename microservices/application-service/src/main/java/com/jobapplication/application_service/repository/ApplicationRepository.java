@@ -1,6 +1,7 @@
 package com.jobapplication.application_service.repository;
 
 import com.jobapplication.application_service.dto.ApplicationResponseDTO;
+import com.jobapplication.application_service.dto.JobEventDTO;
 import com.jobapplication.application_service.model.Application;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +24,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
                 "JOIN jobs j ON a.job_id = j.id " +
                 "WHERE a.applicant_id = :userId", nativeQuery = true)
         List<ApplicationResponseDTO> findByApplicantIdWithJobDetails(@Param("userId") int userId);
+
+        @Query(value = "SELECT j.title FROM jobs j WHERE j.id = :jobId", nativeQuery = true)
+        Optional<String> findJobDetailsById(@Param("jobId") int jobId);
 }

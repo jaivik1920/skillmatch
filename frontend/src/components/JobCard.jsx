@@ -36,6 +36,7 @@ const JobCard =({job}) =>{
                     <p>Job applied successfully</p>
                 </div>
             }
+            <h4 className="text-m text-right"> Job{job.id}</h4>
             <h3 className="text-xl font-semibold mb-2">{job.title}</h3>
             <p className="text-gray-600 mb-1"><span className="font-medium">Company:</span> {job.company}</p>
             <p className="text-gray-600 mb-1"><span className="font-medium">Location:</span> {job.location}</p>
