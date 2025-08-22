@@ -106,7 +106,7 @@ public class JobController {
                     .jobTitle(dbSaveJob.getTitle())
                     .company(dbSaveJob.getCompany())
                     .build();
-            jobEventProducer.sendJobEvent(jobEventDTO);
+         //   jobEventProducer.sendJobEvent(jobEventDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body("Job added successfully with ID: " + job.getId());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());

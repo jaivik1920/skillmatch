@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { applyJobAPI, setApplicationListStatus } from "../store/slice/jobApplicationSlice";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const JobCard =({job}) =>{
 
@@ -51,9 +52,9 @@ const JobCard =({job}) =>{
                 </button>
                 ) :
                 (
-                <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">
+                <Link to={`/my-jobs/${job.id}/showapplicants`} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">
                     Show Applicants
-                </button>
+                </Link>
                 )
             }
         </div>

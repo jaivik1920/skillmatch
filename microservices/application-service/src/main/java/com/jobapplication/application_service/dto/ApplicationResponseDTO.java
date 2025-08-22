@@ -6,8 +6,10 @@ import java.time.LocalDateTime;
 public interface ApplicationResponseDTO {
     String getJobTitle();
     String getCompany();
-    int getApplicationId();
-    int getJobId();
+    Integer getApplicationId();
+    Integer getJobId();
     String getStatus();
     LocalDateTime getAppliedAt();
+    String getName();
+    String getUserName();
 }
