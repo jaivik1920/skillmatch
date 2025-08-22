@@ -35,15 +35,13 @@ const JobList = () =>{
             {error && <p className="text-red-500">{error}</p>}
             {
                 status === "Succeeded" && isRecruiter && jobPostedByRecruiter.length > 0 
-                ? (
+                ? 
                 jobPostedByRecruiter.map( job => <JobCard key={job.id} job ={job} />)
-                ) : 
-                status === "Succeeded" && !isRecruiter && jobs.length > 0 
-                ?
-                (jobs.map( job => <JobCard key={job.id} job ={job} />))
                 :
-                (
-                <p>No jobs available at the moment.</p>)
+                status === "Succeeded" && !isRecruiter && jobs.length > 0 
+                &&
+                (jobs.map( job => <JobCard key={job.id} job ={job} />))
+                
             }
         </div>
     </>

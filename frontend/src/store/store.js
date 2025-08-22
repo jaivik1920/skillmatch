@@ -5,6 +5,7 @@ import jobReducer from "./slice/jobSlice";
 import jobApplication from "./slice/jobApplicationSlice";
 import notificationReducer from "./slice/notificationSlice";
 import postJobReducer from "./slice/postJobslice";
+import applicantReducer from "./slice/applicantSlice";
 
 const appReducer = combineReducers({
         auth: authReducer,
@@ -12,6 +13,7 @@ const appReducer = combineReducers({
         jobApplication: jobApplication,
         notification : notificationReducer,
         postJob: postJobReducer,
+        applicant: applicantReducer,
 });
 
 const rootReducer = (state, action) =>{

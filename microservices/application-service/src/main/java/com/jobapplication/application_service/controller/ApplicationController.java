@@ -61,6 +61,20 @@ public class ApplicationController {
         }
     }
 
+    @GetMapping("/getApplicationsWithDetailsByJobId/{jobId}")
+    public ResponseEntity<?> getApplicationsWithDetailsByJobId(@PathVariable int jobId) {
+        try {
+            List<ApplicationResponseDTO> applications = applicationService.getAllApplicationsWithDetailsByJobId(jobId);
+
+            if (applications.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No applications found for job ID: " + jobId);
+
+            return ResponseEntity.ok(applications);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/getApplicationsByApplicantId/{applicantId}")
     public ResponseEntity<?> getApplicationsByApplicantId(@PathVariable int applicantId) {
         try {

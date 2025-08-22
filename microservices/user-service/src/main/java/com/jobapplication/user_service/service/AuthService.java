@@ -46,6 +46,7 @@ public class AuthService {
                       .username(exisitingUser.getUsername())
                       .role(exisitingUser.getRole().toString())
                       .userId(exisitingUser.getId())
+                      .name(exisitingUser.getName())
                       .build())
               .build();
     }

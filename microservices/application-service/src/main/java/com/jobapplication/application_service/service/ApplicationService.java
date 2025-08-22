@@ -32,11 +32,11 @@ public class ApplicationService {
         Application saveApplication = applicationRepository.save(application);
 
         String jobTitle = applicationRepository.findJobDetailsById(saveApplication.getJobId()).orElse("JobTitle");
-        applyJobEventProducer.sendApplyJobEvent(ApplyJobEventDTO.builder()
-                                                            .applicationId(saveApplication.getId())
-                                                            .applicantId(Integer.parseInt(UserContext.getUserId()))
-                                                            .jobId(saveApplication.getJobId())
-                                                            .jobTitle(jobTitle).build());
+//        applyJobEventProducer.sendApplyJobEvent(ApplyJobEventDTO.builder()
+//                                                            .applicationId(saveApplication.getId())
+//                                                            .applicantId(Integer.parseInt(UserContext.getUserId()))
+//                                                            .jobId(saveApplication.getJobId())
+//                                                            .jobTitle(jobTitle).build());
     }
 
     public void updateApplication(Application application) {
@@ -56,6 +56,11 @@ public class ApplicationService {
 
     public List<Application> getAllApplicationsByJobId(int jobId) {
         return applicationRepository.findByJobId(jobId);
+    }
+
+    public List<ApplicationResponseDTO> getAllApplicationsWithDetailsByJobId(int jobId)
+    {
+        return applicationRepository.findApplicantsDetailsByJob(jobId);
     }
 
     public List<Application> getAllApplicationsByApplicantId(int applicantId) {
