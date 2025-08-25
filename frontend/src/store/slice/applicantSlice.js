@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../api/axiosInterceptor";
-import { act } from "react";
 
 
 const fetchApplicantsAPI = createAsyncThunk("applicant/fetchApplicantsAPI" ,
@@ -28,30 +27,39 @@ const updateApplicationStatusAPI = createAsyncThunk("applicant/updateApplication
 const applicantslice = createSlice({
     name: "applicant",
     initialState : {
-        applicantList : [],
-        status : "idle",
-        error : null
+        applicantsByJob : {}
     },
     reducers :{
-
+            setApplicantsByJobStatus : (state,action)=>{
+                console.log(action.payload);
+                console.log(action.payload);
+                // state.applicantsByJob[action.payload.jobId].status = action.payload;
+            }
     },
     extraReducers : (builder) =>{
         builder
-            .addCase(fetchApplicantsAPI.pending, state =>{
-                state.status = "loading";
-                state.error = null;
+            .addCase(fetchApplicantsAPI.pending, (state,action) =>{
+                const jobId = action.meta.arg;
+                state.applicantsByJob[jobId] = {
+                    status : "loading",
+                    applicantList : [],
+                    error : null
+                }
             })
             .addCase(fetchApplicantsAPI.fulfilled, (state,action) =>{
-                state.status = "Succeeded";
-                state.error = null;
-                state.applicantList = action.payload;
+                const jobId = action.meta.arg;
+                state.applicantsByJob[jobId].status = "Succeeded";
+                state.applicantsByJob[jobId].error = null;
+                state.applicantsByJob[jobId].applicantList = action.payload;
             })
             .addCase(fetchApplicantsAPI.rejected, (state,action) =>{
-                state.status = "failed";
-                state.error = action.payload || "failed to fetch applicants";
+                const jobId = action.meta.arg;
+                state.applicantsByJob[jobId].status = "failed";
+                state.applicantsByJob[jobId].error = action.payload || "failed to fetch applicants";
             })
             .addCase(updateApplicationStatusAPI.fulfilled , (state,action) =>{
-                state.applicantList = state.applicantList.map(application =>{
+                const jobId = action.meta.arg;
+                state.applicantsByJob[jobId].applicantList = state.applicantsByJob[jobId].applicantList.map(application =>{
                     return (application.applicationId === action.payload.id ? { ...application, status: action.payload.status } : application); 
                 });
             })
@@ -60,4 +68,5 @@ const applicantslice = createSlice({
 
 
 export {fetchApplicantsAPI, updateApplicationStatusAPI};
+export const {setApplicantsByJobStatus} = applicantslice.actions;
 export default applicantslice.reducer;

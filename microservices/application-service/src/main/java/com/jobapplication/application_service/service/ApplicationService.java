@@ -2,11 +2,10 @@ package com.jobapplication.application_service.service;
 
 import com.jobapplication.application_service.config.UserContext;
 import com.jobapplication.application_service.dto.ApplicationResponseDTO;
-import com.jobapplication.application_service.dto.ApplyJobEventDTO;
+import com.jobapplication.application_service.dto.ApplicationEventDTO;
 import com.jobapplication.application_service.model.Application;
 import com.jobapplication.application_service.repository.ApplicationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,7 +17,7 @@ import java.util.Objects;
 public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
-    private final ApplyJobEventProducer applyJobEventProducer;
+    private final KafkaProducer kafkaProducer;
 
     public void createApplication(Application application) {
         application.setApplicantId(Integer.parseInt(Objects.requireNonNull(UserContext.getUserId())));
@@ -32,11 +31,12 @@ public class ApplicationService {
         Application saveApplication = applicationRepository.save(application);
 
         String jobTitle = applicationRepository.findJobDetailsById(saveApplication.getJobId()).orElse("JobTitle");
-//        applyJobEventProducer.sendApplyJobEvent(ApplyJobEventDTO.builder()
-//                                                            .applicationId(saveApplication.getId())
-//                                                            .applicantId(Integer.parseInt(UserContext.getUserId()))
-//                                                            .jobId(saveApplication.getJobId())
-//                                                            .jobTitle(jobTitle).build());
+        kafkaProducer.sendApplicationEvents(ApplicationEventDTO.builder()
+                                                            .eventType("APPLICATION_CREATED")
+                                                            .applicationId(saveApplication.getId())
+                                                            .applicantId(Integer.parseInt(UserContext.getUserId()))
+                                                            .jobId(saveApplication.getJobId())
+                                                            .jobTitle(jobTitle).build());
     }
 
     public void updateApplication(Application application) {
@@ -45,6 +45,10 @@ public class ApplicationService {
         existingApplication.setStatus(application.getStatus());
         existingApplication.setUpdatedAt(LocalDateTime.now());
         applicationRepository.save(existingApplication);
+
+        kafkaProducer.sendApplicationEvents(ApplicationEventDTO.builder()
+                                            .eventType("APPLICATION_UPDATED")
+                                            .applicationId(existingApplication.getId()).build());
     }
 
     public void deleteApplication(int id) {
@@ -52,6 +56,10 @@ public class ApplicationService {
             throw new RuntimeException("Application not found with ID: " + id);
         }
         applicationRepository.deleteById(id);
+
+        kafkaProducer.sendApplicationEvents(ApplicationEventDTO.builder()
+                .eventType("APPLICATION_DELETED")
+                .applicationId(id).build());
     }
 
     public List<Application> getAllApplicationsByJobId(int jobId) {

@@ -18,5 +18,4 @@ public class JobEventProducer {
     public void sendJobEvent(JobEventDTO event) {
         kafkaTemplate.send(TOPIC, event);
     }
-
 }

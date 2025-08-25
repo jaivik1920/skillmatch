@@ -1,7 +1,6 @@
 package com.jobapplication.application_service.repository;
 
 import com.jobapplication.application_service.dto.ApplicationResponseDTO;
-import com.jobapplication.application_service.dto.JobEventDTO;
 import com.jobapplication.application_service.model.Application;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
