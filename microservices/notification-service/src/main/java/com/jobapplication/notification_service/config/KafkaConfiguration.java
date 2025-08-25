@@ -1,6 +1,6 @@
 package com.jobapplication.notification_service.config;
 
-import com.jobapplication.notification_service.dto.ApplyJobEventDTO;
+import com.jobapplication.notification_service.dto.ApplicationEventDTO;
 import com.jobapplication.notification_service.dto.JobEventDTO;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -20,13 +20,13 @@ public class KafkaConfiguration {
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, JobEventDTO> jobEventConsumerFactory(ConsumerFactory<String,JobEventDTO> defaultConsumerFactory)
     {
-        return buildFactory(JobEventDTO.class, "notification-user-group");
+        return buildFactory(JobEventDTO.class, "notification-job-group");
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ApplyJobEventDTO> applyJobEventConsumerFactory(ConsumerFactory<String, ApplyJobEventDTO> defaultConsumerFactory)
+    public ConcurrentKafkaListenerContainerFactory<String, ApplicationEventDTO> applyJobEventConsumerFactory(ConsumerFactory<String, ApplicationEventDTO> defaultConsumerFactory)
     {
-        return buildFactory(ApplyJobEventDTO.class, "notification-recruitment-group");
+        return buildFactory(ApplicationEventDTO.class, "notification-application-group");
     }
 
 

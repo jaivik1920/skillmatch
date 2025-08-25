@@ -1,24 +1,40 @@
 package com.jobapplication.job_service.service;
 
+import com.jobapplication.job_service.dto.JobEventDTO;
 import com.jobapplication.job_service.model.Job;
 import com.jobapplication.job_service.model.JobType;
 import com.jobapplication.job_service.repository.JobRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class JobService {
 
-    @Autowired
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
+    private final JobEventProducer jobEventProducer;
+
 
     public Job addJob(Job job)
     {
         if(jobRepository.findById(job.getId()).isPresent())
             throw new RuntimeException("Job already exists with ID: " + job.getId());
-        return jobRepository.save(job);
+
+        Job dbSaveJob = jobRepository.save(job);
+
+        JobEventDTO jobEventDTO = JobEventDTO.builder()
+                .eventType("JOB_POSTED")
+                .jobId(dbSaveJob.getId())
+                .jobTitle(dbSaveJob.getTitle())
+                .company(dbSaveJob.getCompany())
+                .build();
+        jobEventProducer.sendJobEvent(jobEventDTO);
+
+        return dbSaveJob;
+
     }
 
     public Job getJobById(int id) {
@@ -44,11 +60,18 @@ public class JobService {
             dbSaveJob.setJobStatus(job.getJobStatus());
 
         jobRepository.save(dbSaveJob);
+
+        JobEventDTO dto = JobEventDTO.builder().eventType("JOB_UPDATED").jobId(dbSaveJob.getId()).build();
+        jobEventProducer.sendJobEvent(dto);
+
     }
     public void deleteJob(int id) {
         if (jobRepository.findById(id).isEmpty())
             throw new RuntimeException("Job not found with ID: " + id);
         jobRepository.deleteById(id);
+
+        JobEventDTO dto = JobEventDTO.builder().eventType("JOB_DELETED").jobId(id).build();
+        jobEventProducer.sendJobEvent(dto);
     }
 
     public List<Job> getAllJobs() {

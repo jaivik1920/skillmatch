@@ -1,6 +1,6 @@
 package com.jobapplication.notification_service.service;
 
-import com.jobapplication.notification_service.dto.ApplyJobEventDTO;
+import com.jobapplication.notification_service.dto.ApplicationEventDTO;
 import com.jobapplication.notification_service.dto.JobEventDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 @Service
 public class SSEService {
@@ -38,16 +37,28 @@ public class SSEService {
         return emitter;
     }
 
-    public void publishJobPostedEvent()
+    public void publishJobEvents(JobEventDTO dto)
     {
         for(Map.Entry<Integer, List<SseEmitter>> entry : sseMap.entrySet())
         {
             entry.getValue().forEach(emitter -> {
                 try {
-                    emitter.send(SseEmitter.event().name("new-job-posted").data("new job posted"));
-                    System.out.println("New Job Posted Event send");
+                    emitter.send(SseEmitter.event().name("JOB_EVENTS").data(dto));
                 } catch (IOException e) {
-//                    throw new RuntimeException(e);
+                    System.err.println(e.getMessage());
+                }
+            });
+        }
+    }
+
+    public void publishApplicationEvents(ApplicationEventDTO dto)
+    {
+        for(Map.Entry<Integer, List<SseEmitter>> entry : sseMap.entrySet())
+        {
+            entry.getValue().forEach(emitter -> {
+                try {
+                    emitter.send(SseEmitter.event().name("APPLICATION_EVENTS").data(dto));
+                } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }
             });
@@ -60,19 +71,19 @@ public class SSEService {
 
         emitters.forEach(emitter ->{
            try{
-                emitter.send(SseEmitter.event().name("job-posted").data(dto));
+                emitter.send(SseEmitter.event().name("JOBS_NOTIFICATIONS").data(dto));
            } catch (Exception e) {
                System.err.println(e.getMessage());
            }
         });
     }
 
-    public void sendApplyJobEventNotifications(int userid, ApplyJobEventDTO eventDTO)
+    public void sendApplicationEventsToRecruiter(int userid, ApplicationEventDTO eventDTO)
     {
         List<SseEmitter> emitters = sseMap.getOrDefault(userid, new ArrayList<>());
         emitters.forEach(emitter ->{
             try {
-                emitter.send(SseEmitter.event().name("job-applied").data(eventDTO));
+                emitter.send(SseEmitter.event().name("APPLY_JOB_NOTIFICATIONS").data(eventDTO));
             }
             catch (Exception e)
             {

@@ -1,6 +1,6 @@
 package com.jobapplication.notification_service.service;
 
-import com.jobapplication.notification_service.dto.ApplyJobEventDTO;
+import com.jobapplication.notification_service.dto.ApplicationEventDTO;
 import com.jobapplication.notification_service.dto.JobEventDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -18,17 +18,28 @@ public class ConsumerService {
             try
             {
                 System.out.println("Received job event: " + event);
-                sseService.publishJobPostedEvent();
-                alertService.processAlerts(event);
+
+                String eventType = event.getEventType();
+
+                if(eventType.equals("JOB_POSTED"))
+                    alertService.processAlerts(event);
+
+                sseService.publishJobEvents(event);
             } catch (Exception e) {
                 System.out.println("Error processing job event: " + e.getMessage());
             }
         }
 
-        @KafkaListener(topics = "apply-job-events", containerFactory = "applyJobEventConsumerFactory")
-        public void consumeApplyJobEvent(ApplyJobEventDTO eventDTO)
+        @KafkaListener(topics = "application-events", containerFactory = "applyJobEventConsumerFactory")
+        public void consumeApplicationEvent(ApplicationEventDTO eventDTO)
         {
             System.out.println("event received" + eventDTO);
-            sseService.sendApplyJobEventNotifications(9,eventDTO);
+
+            String eventType = eventDTO.getEventType();
+
+            if(eventType.equals("APPLICATION_CREATED"))
+                sseService.sendApplicationEventsToRecruiter(9,eventDTO);
+
+            sseService.publishApplicationEvents(eventDTO);
         }
 }

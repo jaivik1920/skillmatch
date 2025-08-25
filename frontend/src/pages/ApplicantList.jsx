@@ -7,7 +7,7 @@ const ApplicantList = ()=>{
 
     const {jobId} = useParams();
     const dispatch = useDispatch();
-    const {status,error,applicantList} = useSelector(state => state.applicant);
+    const {status,error,applicantList} = useSelector(state => state.applicant.applicantsByJob[jobId] || { status: "idle", applicantList: [], error: null });
     useEffect(()=>{
             if(status === "idle")
                 dispatch(fetchApplicantsAPI(jobId));

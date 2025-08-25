@@ -3,7 +3,7 @@ import InputField from "../components/InputField"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
 import { postJobAPI } from "../store/slice/postJobslice";
-import { setStatus } from "../store/slice/jobSlice";
+import { setJobSliceStatus } from "../store/slice/jobSlice";
 
 const PostJob = () =>{
 
@@ -37,7 +37,7 @@ const PostJob = () =>{
 
         if(postJobAPI.fulfilled.match(result))
         {
-            dispatch(setStatus("idle"));
+            dispatch(setJobSliceStatus("idle"));
             navigate("/my-jobs"); 
         }
     }

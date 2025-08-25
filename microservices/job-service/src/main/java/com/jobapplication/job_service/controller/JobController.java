@@ -18,7 +18,6 @@ import java.util.List;
 public class JobController {
 
     private final JobService jobService;
-    private final JobEventProducer jobEventProducer;
 
     @GetMapping("/getAllJobs")
     public ResponseEntity<?> getAllJobs() {
@@ -100,13 +99,6 @@ public class JobController {
     public ResponseEntity<?> addJob(@RequestBody Job job) {
         try {
              Job dbSaveJob = jobService.addJob(job);
-            JobEventDTO jobEventDTO = JobEventDTO.builder()
-                    .eventType("JOB_POSTED")
-                    .jobId(dbSaveJob.getId())
-                    .jobTitle(dbSaveJob.getTitle())
-                    .company(dbSaveJob.getCompany())
-                    .build();
-         //   jobEventProducer.sendJobEvent(jobEventDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body("Job added successfully with ID: " + job.getId());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());

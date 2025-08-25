@@ -1,4 +1,4 @@
-package com.jobapplication.notification_service.dto;
+package com.jobapplication.application_service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ApplyJobEventDTO {
+public class ApplicationEventDTO {
+
     private int applicationId;
     private int jobId;
     private int applicantId;
     private String jobTitle;
+    private String eventType;
 }
