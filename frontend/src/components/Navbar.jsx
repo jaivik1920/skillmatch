@@ -39,7 +39,7 @@ const Navbar = () => {
                 isAuthenticated ?
                 <>          
                 <span className="mx-2 italic">Welcome, {user?.name}</span>     
-                <Link to = "/my-profile" className="mx-2">My Profile</Link>
+                <Link to = "/user/my-profile" className="mx-2">My Profile</Link>
                 <button className = "bg-white text-blue-500 px-4 py-2 rounded-lg hover:bg-gray-200"
                 onClick={handleLogout}> Logout</button>
                 </>

@@ -31,9 +31,9 @@ const applicantslice = createSlice({
     },
     reducers :{
             setApplicantsByJobStatus : (state,action)=>{
-                console.log(action.payload);
-                console.log(action.payload);
-                // state.applicantsByJob[action.payload.jobId].status = action.payload;
+                if(!state.applicantsByJob[action.payload.jobId])
+                    state.applicantsByJob[action.payload.jobId] = { status: "idle", applicantList: [], error: null };
+                state.applicantsByJob[action.payload.jobId].status = action.payload.status;
             }
     },
     extraReducers : (builder) =>{
@@ -58,7 +58,7 @@ const applicantslice = createSlice({
                 state.applicantsByJob[jobId].error = action.payload || "failed to fetch applicants";
             })
             .addCase(updateApplicationStatusAPI.fulfilled , (state,action) =>{
-                const jobId = action.meta.arg;
+                const jobId = action.meta.arg.jobId;
                 state.applicantsByJob[jobId].applicantList = state.applicantsByJob[jobId].applicantList.map(application =>{
                     return (application.applicationId === action.payload.id ? { ...application, status: action.payload.status } : application); 
                 });
