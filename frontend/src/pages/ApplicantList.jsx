@@ -17,6 +17,7 @@ const ApplicantList = ()=>{
     const handleStatusChange = (applicationId, status) =>{
             const applicationData = {
                 "id" : applicationId,
+                "jobId" : jobId,
                 "status" : status
             }
             dispatch(updateApplicationStatusAPI(applicationData));

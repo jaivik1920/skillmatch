@@ -17,7 +17,17 @@ const connectToSSE = (userId,dispatch)=>{
         eventSource.addEventListener("APPLICATION_EVENTS", event =>{
             console.log("APPLICATION EVENTS RECEIEVED");
             dispatch(setApplicationListStatus("idle"));
-            // dispatch(setApplicantsByJobStatus("idle")); tbd for show applicants for recruiters.
+
+            const data = JSON.parse(event.data);
+            if(data.eventType === "APPLICATION_CREATED" && data?.jobId)
+            {
+                dispatch(setApplicantsByJobStatus(
+                    {
+                        "jobId" : data.jobId,
+                        "status" : "idle"
+                    }
+                )); 
+            }
         })
 
         eventSource.addEventListener("JOBS_NOTIFICATIONS", event =>{

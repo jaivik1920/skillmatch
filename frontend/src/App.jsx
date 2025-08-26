@@ -10,6 +10,7 @@ import PostJob from "./pages/PostJob"
 import MyApplicationsList from "./pages/MyApplicationsList"
 import Home from "./pages/Home"
 import ApplicantList from "./pages/ApplicantList"
+import MyProfile from "./components/MyProfile"
 
 const App = () => {
 
@@ -26,8 +27,8 @@ const App = () => {
         <Route path="/my-jobs" element={<ProtectedRoute><JobList/></ProtectedRoute>} />
         <Route path="/jobs" element={<ProtectedRoute><JobList/></ProtectedRoute>} /> 
         <Route path="/my-applications" element={<ProtectedRoute><MyApplicationsList/></ProtectedRoute>} />
-        <Route path="/my-profile" element={<ProtectedRoute><h1>My Profile</h1></ProtectedRoute>} />
         <Route path="/my-jobs/:jobId/showapplicants" element={<ProtectedRoute> <ApplicantList/></ProtectedRoute>}/>
+        <Route path="/user/my-profile" element ={<ProtectedRoute> <MyProfile/></ProtectedRoute>} />
       </Routes>
     </>
   )

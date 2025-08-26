@@ -49,8 +49,8 @@ const jobApplicationSlice = createSlice({
                 state.applyError = null;
             })
             .addCase(applyJobAPI.rejected, (state,action) =>{
-                state.applyStatus = "failed",
-                state.applyError = action.payload
+                state.applyStatus = "failed";
+                state.applyError = action.payload;
             })
             .addCase(getApplicationsByApplicantIdAPI.pending, state =>{
                 state.applicationListStatus = "loading";

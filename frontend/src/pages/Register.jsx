@@ -14,6 +14,8 @@ const Register = () => {
         name: "",
         username: "",
         password: "",
+        location: "",
+        phone: "",
         role: "APPLICANT",
     });
 
@@ -85,6 +87,22 @@ const Register = () => {
                 placeholder="Enter your password"
                 required
                 />
+                <InputField
+                    label="Phone"
+                    type="text"
+                    name="phone"
+                    value={formdata.phone}
+                    onChange={handleChange}
+                    placeholder="Enter your Phone number"
+                    required/>
+                <InputField
+                    label="Location"
+                    type="text"
+                    name="location"
+                    value={formdata.location}
+                    placeholder="Enter your Place of Residence"
+                    onChange={handleChange}
+                    required/>
                 <div>
                     <label htmlFor="role" className="text-sm font-medium text-gray-700 mb-1">
                         Choose your role:
