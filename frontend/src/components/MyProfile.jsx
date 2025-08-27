@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserProfileAPI, updateUserProfileAPI } from "../store/slice/userProfileSlice";
+import { downloadResumeAPI, fetchUserProfileAPI, updateUserProfileAPI, updateUserProfileWithResumeAPI } from "../store/slice/userProfileSlice";
 import InputField from "./InputField";
 import { updateApplicationStatusAPI } from "../store/slice/applicantSlice";
 
@@ -8,19 +8,17 @@ const MyProfile = ()=>{
 
     const {status, user, error, updateStatus} = useSelector(state => state.userProfile);
     const dispatch = useDispatch();
-
-    console.log(user);
-    
+    const [isResumeUpdated, setIsResumeUpdated] = useState(false);
     const [formData, setFormData] = useState({
         name : "",
         username : "",
         phone : "",
         location : "",
         password : "",
-        id: ""
+        id: "",
+        resume: null
     });
 
-    console.log(formData);
 
     useEffect(()=>{
         if(status === "idle")
@@ -30,14 +28,15 @@ const MyProfile = ()=>{
     useEffect(()=>{
         if(user)
         {
-            setFormData({
+            setFormData(prev => ({
+                ...prev,
                 id : user.id,
                 name : user.name,
                 username : user.username,
                 phone : user.phone,
                 location : user.location,
                 password : user.password
-            });
+            }));
         }
     },[user]);
 
@@ -49,9 +48,31 @@ const MyProfile = ()=>{
         }));
     }
 
+    const handleFileChange = e =>{
+        setIsResumeUpdated(true);
+        setFormData(prev =>({
+            ...prev,
+            [e.target.name] : e.target.files[0]
+        }));
+    }
+
+    const downloadResume = ()=>{
+        dispatch(downloadResumeAPI(user.username));
+    }
+
     const handleFormSubmit = (e)=>{
         e.preventDefault();
-        dispatch(updateUserProfileAPI(formData));
+        if(!isResumeUpdated){
+            dispatch(updateUserProfileAPI(formData));
+            return;
+        }
+
+        const data = new FormData();
+        for(const key in formData)
+        {
+            data.append(key, formData[key]);
+        }
+        dispatch(updateUserProfileWithResumeAPI(data));
     }
 
      if(status === "loading")
@@ -101,13 +122,31 @@ const MyProfile = ()=>{
                         value={formData.location}
                         onChange={handleChange}
                         required/>
+                    {
+                        user.role == "APPLICANT" &&
+                        <div className="space-y-2">
+                                <button
+                                    type="button"
+                                    onClick={downloadResume}
+                                    className="bg-green-500 text-white px-4 py-2 rounded"
+                                >
+                                    Download Resume ({user.resumeName})
+                                </button>
+                                <InputField
+                                    label="Replace Resume (PDF/DOC)"
+                                    type="file"
+                                    name="resume"
+                                    onChange={handleFileChange}
+                                    accept=".pdf,.doc, .docx"
+                                    />
+                        </div>
+                    }
                     <button
                         type="submit"
                         className="w-full bg-blue-500 h-10 text-white"
                         disabled={updateStatus === "loading"}
                         >
-                        {updateStatus === "loading" ? "Saving..." : "Save Changes"}
-                        Update Profile
+                        {updateStatus === "loading" ? "Saving..." : "Update Profile"}
                     </button>
                 </form>
             </div>
