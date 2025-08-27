@@ -17,9 +17,20 @@ const Register = () => {
         location: "",
         phone: "",
         role: "APPLICANT",
+        resume: null,
     });
 
     const handleChange = (e) => {
+
+        if(e.target.name === "resume")
+        {
+            setFormData(prev => ({
+                ...prev, 
+                [e.target.name] : e.target.files[0]
+            }));
+            return;
+        }
+
         setFormData(prev =>
         ({
             ...prev,
@@ -30,7 +41,14 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const result = await dispatch(registerAPI(formdata));
+        
+        const data = new FormData();
+
+        for(const key in formdata)
+        {
+            data.append(key, formdata[key]);
+        }
+        const result = await dispatch(registerAPI(data));
         if(registerAPI.fulfilled.match(result))
         {
             dispatch(setMessage(result.payload));
@@ -58,6 +76,7 @@ const Register = () => {
             <form
                 className="bg-white p-6 rounded-lg shadow-md w-full"
                 onSubmit={handleSubmit}
+                encType="multipart/form-data"
             >
                 <h1 className="font-medium text-2xl text-center mb-4"> Register Page</h1>
                 <InputField
@@ -103,7 +122,7 @@ const Register = () => {
                     placeholder="Enter your Place of Residence"
                     onChange={handleChange}
                     required/>
-                <div>
+                <div className="mb-4">
                     <label htmlFor="role" className="text-sm font-medium text-gray-700 mb-1">
                         Choose your role:
                     </label>
@@ -112,6 +131,18 @@ const Register = () => {
                     <option value="RECRUITER">RECRUITER</option>
                     </select>
                 </div>
+                {
+                    formdata.role === "APPLICANT" &&
+                    <InputField
+                        label="Upload Resume (PDF/DOC)"
+                        type="file"
+                        name="resume"
+                        onChange={handleChange}
+                        accept=".pdf,.doc, .docx"
+                        required/>
+                
+                }
+
                 <button type="submit" className="w-full bg-blue-500 h-10 text-white mt-4">
                     Become a member
                 </button>

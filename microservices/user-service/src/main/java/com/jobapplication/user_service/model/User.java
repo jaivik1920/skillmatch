@@ -33,4 +33,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.APPLICANT;
+
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] resume;
+
+    private String resumeName;
 }
