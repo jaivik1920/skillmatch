@@ -11,12 +11,12 @@ const NotificationListner = ()=>{
     const {user} = useSelector(state => state.auth);
 
     useEffect(()=>{
-        if(!user?.userId) return;
-        const eventSource = connectToSSE(user?.userId, dispatch);
+        if(!user?.id) return;
+        const eventSource = connectToSSE(user?.id, dispatch);
         return ()=>{
             eventSource?.close();
         }
-    },[user?.userId,dispatch]);
+    },[user?.id,dispatch]);
 
     useEffect(()=>{
         if(notifications.length == 0) return;

@@ -19,7 +19,7 @@ const PostJob = () =>{
       location : "",
       jobType : "FULL_TIME",
       salary: null,
-      recruiterId: user?.userId
+      recruiterId: user?.id
     })
 
     const handleChange = (e) =>{
