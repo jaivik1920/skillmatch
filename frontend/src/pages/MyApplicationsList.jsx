@@ -16,7 +16,7 @@ const MyApplicationsList = ()=>{
     const {user} = useSelector(state => state.auth);
     useEffect(()=>{
         if(applicationListStatus === "idle")
-            dispatch(getApplicationsByApplicantIdAPI(user?.userId));
+            dispatch(getApplicationsByApplicantIdAPI(user?.id));
     },[applicationListStatus,dispatch]);
 
     return <>

@@ -12,7 +12,7 @@ const JobList = () =>{
     let isRecruiter = false;
     if(user?.role === "RECRUITER")
     {
-        jobPostedByRecruiter = jobs.filter(job => job.recruiterId == user?.userId);
+        jobPostedByRecruiter = jobs.filter(job => job.recruiterId == user?.id);
         isRecruiter = true;
     }
 

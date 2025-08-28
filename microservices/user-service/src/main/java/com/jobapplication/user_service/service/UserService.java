@@ -65,7 +65,7 @@ public class UserService {
 
     public User updateProfileWithResume(UserDTO userDTO, MultipartFile resume) throws IOException {
         User user = User.builder()
-                .id(userDTO.getUserId())
+                .id(userDTO.getId())
                 .name(userDTO.getName())
                 .username(userDTO.getUsername())
                 .password(userDTO.getPassword())

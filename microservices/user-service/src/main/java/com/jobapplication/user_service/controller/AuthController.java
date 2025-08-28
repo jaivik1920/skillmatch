@@ -19,7 +19,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> register(@ModelAttribute UserDTO userDTO, @RequestParam("resume")MultipartFile resume) {
+    public ResponseEntity<?> register(@ModelAttribute UserDTO userDTO, @RequestParam(value = "resume" ,required = false)MultipartFile resume) {
         try
         {
             authService.createUser(userDTO,resume);

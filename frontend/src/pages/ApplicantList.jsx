@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchApplicantsAPI, updateApplicationStatusAPI } from "../store/slice/applicantSlice";
+import { downloadResumeAPI } from "../store/slice/userProfileSlice";
 
 const ApplicantList = ()=>{
 
@@ -37,6 +38,7 @@ const ApplicantList = ()=>{
                 <tr className="bg-gray-100">
                     <th className="p-2 border">Name</th>
                     <th className="p-2 border">Email</th>
+                    <th className="p-2 border">Resume</th>
                     <th className="p-2 border">Status</th>
                     <th className="p-2 border">Actions</th>
                 </tr>
@@ -48,6 +50,11 @@ const ApplicantList = ()=>{
                             <tr className="text-center" key={applicant.applicationId}>
                                 <td className="p-2 border">{applicant.name}</td>
                                 <td className="p-2 border">{applicant.userName}</td>
+                                <td className="p-2 border">
+                                    <button
+                                    className="py-1 bg-blue-500 text-white rounded w-full"
+                                    onClick={()=> dispatch(downloadResumeAPI(applicant.userName))}>Click here to view {applicant.name}'s resume</button>
+                                </td>
                                 <td className="p-2 border">{applicant.status}</td>
                                 <td className="p-2 border space-x-2">
                                     <button

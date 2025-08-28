@@ -9,6 +9,7 @@ const MyProfile = ()=>{
     const {status, user, error, updateStatus} = useSelector(state => state.userProfile);
     const dispatch = useDispatch();
     const [isResumeUpdated, setIsResumeUpdated] = useState(false);
+    const [inputKey, setInputKey] = useState(Date.now());
     const [formData, setFormData] = useState({
         name : "",
         username : "",
@@ -73,6 +74,7 @@ const MyProfile = ()=>{
             data.append(key, formData[key]);
         }
         dispatch(updateUserProfileWithResumeAPI(data));
+        setInputKey(Date.now());
     }
 
      if(status === "loading")
@@ -138,6 +140,7 @@ const MyProfile = ()=>{
                                     name="resume"
                                     onChange={handleFileChange}
                                     accept=".pdf,.doc, .docx"
+                                    key={inputKey}
                                     />
                         </div>
                     }

@@ -34,18 +34,15 @@ public class AuthService {
                 .location(userDTO.getLocation())
                 .phone(userDTO.getPhone())
                 .name(userDTO.getName()).build();
-        if(user.getRole() == Role.APPLICANT && resume == null && resume.isEmpty())
-            throw new RuntimeException("Resume required");
-
+        if(user.getRole() == Role.APPLICANT && resume != null && !resume.isEmpty()) {
+            user.setResumeName(resume.getOriginalFilename());
+            user.setResume(resume.getBytes());
+        }
         Optional<User> optionalUser = userRepository.findByUsername(user.getUsername());
 
         if(optionalUser.isPresent())
             throw  new RuntimeException("User already exists with username: " + user.getUsername());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-
-
-        user.setResumeName(resume.getOriginalFilename());
-        user.setResume(resume.getBytes());
         userRepository.save(user);
     }
 
@@ -61,7 +58,7 @@ public class AuthService {
               .user(UserDTO.builder()
                       .username(exisitingUser.getUsername())
                       .role(exisitingUser.getRole().toString())
-                      .userId(exisitingUser.getId())
+                      .id(exisitingUser.getId())
                       .name(exisitingUser.getName())
                       .build())
               .build();

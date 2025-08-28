@@ -1,4 +1,4 @@
-const InputField = ({ label, type = "text", name, value, onChange, placeholder, required, disabled,accept }) => {
+const InputField = ({ label, type = "text", name, ...props }) => {
   return (
     <div className="mb-4">
       {label && (
@@ -10,12 +10,7 @@ const InputField = ({ label, type = "text", name, value, onChange, placeholder, 
         type={type}
         name={name}
         id={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        required={required}
-        disabled = {disabled}
-        accept={accept}
+        {...props}
         className="w-full px-4 py-2border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
     </div>
