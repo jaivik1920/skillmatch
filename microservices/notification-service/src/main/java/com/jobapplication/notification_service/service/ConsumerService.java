@@ -37,8 +37,9 @@ public class ConsumerService {
 
             String eventType = eventDTO.getEventType();
 
-            if(eventType.equals("APPLICATION_CREATED"))
-                sseService.sendApplicationEventsToRecruiter(9,eventDTO);
+            if(eventType.equals("APPLICATION_CREATED")) {
+                sseService.sendApplicationEventsToRecruiter(eventDTO.getRecruiterId(), eventDTO);
+            }
 
             sseService.publishApplicationEvents(eventDTO);
         }

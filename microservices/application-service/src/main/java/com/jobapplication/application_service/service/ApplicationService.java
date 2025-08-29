@@ -30,13 +30,14 @@ public class ApplicationService {
         }
         Application saveApplication = applicationRepository.save(application);
 
-        String jobTitle = applicationRepository.findJobDetailsById(saveApplication.getJobId()).orElse("JobTitle");
+        Object[] data =(Object[]) applicationRepository.findJobDetailsById(saveApplication.getJobId()).get();
         kafkaProducer.sendApplicationEvents(ApplicationEventDTO.builder()
                                                             .eventType("APPLICATION_CREATED")
                                                             .applicationId(saveApplication.getId())
                                                             .applicantId(Integer.parseInt(UserContext.getUserId()))
                                                             .jobId(saveApplication.getJobId())
-                                                            .jobTitle(jobTitle).build());
+                                                            .jobTitle(data[0].toString())
+                                                            .recruiterId((int)data[1]).build());
     }
 
     public void updateApplication(Application application) {

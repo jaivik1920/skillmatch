@@ -24,11 +24,11 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
                 "WHERE a.applicant_id = :userId", nativeQuery = true)
         List<ApplicationResponseDTO> findByApplicantIdWithJobDetails(@Param("userId") int userId);
 
-        @Query(value = "SELECT j.title FROM jobs j WHERE j.id = :jobId", nativeQuery = true)
-        Optional<String> findJobDetailsById(@Param("jobId") int jobId);
+        @Query(value = "SELECT j.title, j.recruiter_id FROM jobs j WHERE j.id = :jobId", nativeQuery = true)
+        Optional<Object> findJobDetailsById(@Param("jobId") int jobId);
 
         @Query(value = "SELECT u.name, u.username, a.id as applicationId, a.status FROM " +
-                "APPLICATIONS a JOIN USERS u " +
+                "applications a JOIN users u " +
                 "ON a.applicant_id = u.id " +
                 "WHERE job_id = :jobId", nativeQuery = true)
         List<ApplicationResponseDTO> findApplicantsDetailsByJob(@Param("jobId") int jobId);
