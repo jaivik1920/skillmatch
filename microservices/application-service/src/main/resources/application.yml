@@ -1,0 +1,33 @@
+server:
+  port: 9093
+
+spring:
+  application:
+    name: application-service
+
+  datasource:
+    url: databaseurl
+    username: username
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka:8761/eureka
+
+jwt:
+  secret: your_secret_key
